@@ -13,7 +13,8 @@ export class CustomerComponent implements OnInit {
   customerForm: FormGroup;
   customer = new Customer();
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit() {
     this.customerForm = new FormGroup({
@@ -28,4 +29,20 @@ export class CustomerComponent implements OnInit {
     console.log(this.customerForm);
     console.log('Saved: ' + JSON.stringify(this.customerForm));
   }
+
+  populateTestData(): void {
+    // this.customerForm.setValue({
+    //   firstName: 'rishi',
+    //   lastName: 'abee',
+    //   email: 'rishi@ab.ee',
+    //   sendCatalog: false
+    // });
+
+    this.customerForm.patchValue({
+      firstName: 'rishi',
+      lastName: 'abee',
+      sendCatalog: false
+    });
+  }
+
 }
