@@ -1,6 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import {FormGroup, FormBuilder, Validators} from '@angular/forms';
-import { Customer } from './customer';
+import {FormGroup, FormBuilder, Validators, AbstractControl} from '@angular/forms';
+
+function ratingRange( c: AbstractControl): { [ key: string ]: boolean } | null {
+ if (c.value !== null && (isNaN(c.value) || c.value < 1 || c.value > 5)) {
+   return  { range : true };
+ }
+ return null;
+}
+
 
 @Component({
   selector: 'app-customer',
@@ -11,7 +18,6 @@ import { Customer } from './customer';
 export class CustomerComponent implements OnInit {
   // Defines the form modal.
   customerForm: FormGroup;
-  customer = new Customer();
 
   constructor(private fb: FormBuilder) {
   }
@@ -23,6 +29,7 @@ export class CustomerComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       phone: '',
       notification: 'email',
+      rating: [null, ratingRange],
       sendCatalog: true
     });
   }
@@ -43,6 +50,7 @@ export class CustomerComponent implements OnInit {
     this.customerForm.patchValue({
       firstName: 'rishi',
       lastName: 'abee',
+      email: 'toto@toto.com',
       sendCatalog: false
     });
   }
