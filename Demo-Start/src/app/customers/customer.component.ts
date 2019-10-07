@@ -17,6 +17,9 @@ function emailCompare( c: AbstractControl): { [ key: string ]: boolean } | null 
   const emailControl = c.get('email');
   const confirmEmailControl = c.get('confirmEmail');
 
+  if (confirmEmailControl.value.length === 0 || emailControl.pristine || confirmEmailControl.pristine) {
+    return null;
+  }
   if (emailControl.value !== confirmEmailControl.value) {
     return {match: true};
   }

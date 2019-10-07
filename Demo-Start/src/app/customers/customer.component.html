@@ -82,15 +82,13 @@
                  type="confirmEmail"
                  placeholder="Confirmation email (required)"
                  formControlName="confirmEmail"
-                 [ngClass]="{'is-invalid': customerForm.get('emailGroup').errors ||  ((customerForm.get('emailGroup.confirmEmail').touched
+                 [ngClass]="{'is-invalid': customerForm.get('emailGroup').errors ||
+                   ((customerForm.get('emailGroup.confirmEmail').touched
                  || customerForm.get('emailGroup.confirmEmail').dirty)
                  && !customerForm.get('emailGroup.confirmEmail').valid) }" />
           <span class="invalid-feedback">
-            <span *ngIf="customerForm.get('emailGroup.confirmEmail').errors?.required">
-              Please enter your email address.
-            </span>
-            <span *ngIf="customerForm.get('emailGroup.confirmEmail').errors?.email">
-              Please enter a valid email address.
+             <span *ngIf="customerForm.get('emailGroup.confirmEmail').errors?.required">
+              Please confirm your email address.
             </span>
               <span *ngIf="customerForm.get('emailGroup').errors?.match">
               The confirmation email doest not match.
