@@ -60,8 +60,8 @@
                  type="email"
                  placeholder="Email (required)"
                  formControlName="email"
-                 [ngClass]="{'is-invalid': (customerForm.get('emailGroup.email').touched ||
-                 customerForm.get('emailGroup.email').dirty) && !customerForm.get('emailGroup.email').valid }" />
+                 [ngClass]="{'is-invalid': customerForm.get('emailGroup').errors || ((customerForm.get('emailGroup.email').touched ||
+                 customerForm.get('emailGroup.email').dirty) && !customerForm.get('emailGroup.email').valid) }" />
           <span class="invalid-feedback">
             <span *ngIf="customerForm.get('emailGroup.email').errors?.required">
               Please enter your email address.
@@ -82,9 +82,9 @@
                  type="confirmEmail"
                  placeholder="Confirmation email (required)"
                  formControlName="confirmEmail"
-                 [ngClass]="{'is-invalid': (customerForm.get('emailGroup.confirmEmail').touched
+                 [ngClass]="{'is-invalid': customerForm.get('emailGroup').errors ||  ((customerForm.get('emailGroup.confirmEmail').touched
                  || customerForm.get('emailGroup.confirmEmail').dirty)
-                 && !customerForm.get('emailGroup.confirmEmail').valid }" />
+                 && !customerForm.get('emailGroup.confirmEmail').valid) }" />
           <span class="invalid-feedback">
             <span *ngIf="customerForm.get('emailGroup.confirmEmail').errors?.required">
               Please enter your email address.
@@ -92,7 +92,7 @@
             <span *ngIf="customerForm.get('emailGroup.confirmEmail').errors?.email">
               Please enter a valid email address.
             </span>
-              <span *ngIf="customerForm.get('emailGroup.confirmEmail').errors?.match">
+              <span *ngIf="customerForm.get('emailGroup').errors?.match">
               The confirmation email doest not match.
             </span>
           </span>

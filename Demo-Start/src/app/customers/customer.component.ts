@@ -13,6 +13,19 @@ function ratingRange(min: number, max: number): ValidatorFn {
 }
 
 
+function emailCompare( c: AbstractControl): { [ key: string ]: boolean } | null {
+  const emailControl = c.get('email');
+  const confirmEmailControl = c.get('confirmEmail');
+
+  if (emailControl.value !== confirmEmailControl.value) {
+    return {match: true};
+  }
+  return null;
+}
+
+
+
+
 @Component({
   selector: 'app-customer',
   templateUrl: './customer.component.html',
@@ -33,7 +46,7 @@ export class CustomerComponent implements OnInit {
       emailGroup: this.fb.group({
         email: ['', [Validators.required, Validators.email]],
         confirmEmail: ['', [Validators.required]],
-      }),
+      }, {validator: emailCompare}),
       phone: '',
       notification: 'email',
       rating: [null, ratingRange(1, 5)],
