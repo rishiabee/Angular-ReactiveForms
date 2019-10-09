@@ -1,19 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormGroup, FormBuilder, Validators, AbstractControl, ValidatorFn} from '@angular/forms';
 
 
 // Factory function with a custom validator.
 function ratingRange(min: number, max: number): ValidatorFn {
-  return ( c: AbstractControl): { [ key: string ]: boolean } | null => {
+  return (c: AbstractControl): { [key: string]: boolean } | null => {
     if (c.value !== null && (isNaN(c.value) || c.value < min || c.value > max)) {
-      return  { range : true };
+      return {range: true};
     }
     return null;
   };
 }
 
 
-function emailCompare( c: AbstractControl): { [ key: string ]: boolean } | null {
+function emailCompare(c: AbstractControl): { [key: string]: boolean } | null {
   const emailControl = c.get('email');
   const confirmEmailControl = c.get('confirmEmail');
 
@@ -27,8 +27,6 @@ function emailCompare( c: AbstractControl): { [ key: string ]: boolean } | null 
 }
 
 
-
-
 @Component({
   selector: 'app-customer',
   templateUrl: './customer.component.html',
@@ -38,6 +36,11 @@ function emailCompare( c: AbstractControl): { [ key: string ]: boolean } | null 
 export class CustomerComponent implements OnInit {
   // Defines the form modal.
   customerForm: FormGroup;
+  emailMessage: string;
+  private validationMessages = {
+    required: 'Please enter your email address.',
+    email: 'Please enter a valid email address.'
+  };
 
   constructor(private fb: FormBuilder) {
   }
@@ -55,6 +58,11 @@ export class CustomerComponent implements OnInit {
       rating: [null, ratingRange(1, 5)],
       sendCatalog: true
     });
+
+    this.customerForm.get('notification').valueChanges.subscribe(value => this.setNotification(value));
+
+    const emailControl = this.customerForm.get('emailGroup.email');
+    emailControl.valueChanges.subscribe(value => this.setMessage(emailControl));
   }
 
   save() {
@@ -86,5 +94,12 @@ export class CustomerComponent implements OnInit {
       phoneControl.clearValidators();
     }
     phoneControl.updateValueAndValidity();
+  }
+
+  private setMessage(c: AbstractControl): void {
+    this.emailMessage = '';
+    if ((c.touched || c.dirty) && c.errors) {
+      this.emailMessage = Object.keys(c.errors).map(key => this.validationMessages[key]).join(' ');
+    }
   }
 }
