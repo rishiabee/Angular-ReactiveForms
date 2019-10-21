@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {FormGroup, FormBuilder, Validators, AbstractControl, ValidatorFn} from '@angular/forms';
+import {AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators} from '@angular/forms';
+import {debounceTime} from 'rxjs/operators';
 
 
 // Factory function with a custom validator.
@@ -62,7 +63,9 @@ export class CustomerComponent implements OnInit {
     this.customerForm.get('notification').valueChanges.subscribe(value => this.setNotification(value));
 
     const emailControl = this.customerForm.get('emailGroup.email');
-    emailControl.valueChanges.subscribe(value => this.setMessage(emailControl));
+    emailControl.valueChanges.pipe(
+      debounceTime(1000)
+    ).subscribe(value => this.setMessage(emailControl));
   }
 
   save() {
