@@ -58,16 +58,7 @@ export class CustomerComponent implements OnInit {
       notification: 'email',
       rating: [null, ratingRange(1, 5)],
       sendCatalog: true,
-      addresses: this.fb.group({
-        addressType: 'home',
-        street1: '',
-        street2: '',
-        city: '',
-        state: '',
-        zipCode: ''
-      })
-
-
+      addresses: this.buildAddress()
     });
 
     this.customerForm.get('notification').valueChanges.subscribe(value => this.setNotification(value));
@@ -81,6 +72,17 @@ export class CustomerComponent implements OnInit {
   save() {
     console.log(this.customerForm);
     console.log('Saved: ' + JSON.stringify(this.customerForm));
+  }
+
+  buildAddress(): FormGroup {
+    return this.fb.group({
+      addressType: 'home',
+      street1: '',
+      street2: '',
+      city: '',
+      state: '',
+      zipCode: ''
+    });
   }
 
   populateTestData(): void {
