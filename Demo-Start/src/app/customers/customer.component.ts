@@ -13,6 +13,26 @@ function ratingRange(min: number, max: number): ValidatorFn {
   };
 }
 
+// Factory function with a custom password validator.
+function validatePassword(): ValidatorFn {
+  return (c: AbstractControl): { [key: string]: boolean } | null => {
+    // Numbers
+    const hasNumber = /\d/.test(c.value);
+    // Uppercase letters
+    const hasUpper = /[A-Z]/.test(c.value);
+    // Lowercase letters
+    const hasLower = /[a-z]/.test(c.value);
+    // Special characters
+    const hasSpecialCharacters = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(c.value);
+    console.log(`Num: ${hasNumber}, Upp: ${hasUpper}, Low: ${hasLower}, Sp Char: ${hasSpecialCharacters} `);
+    const valid = hasNumber && hasSpecialCharacters && (hasUpper || hasLower);
+    if (!valid) {
+      // return what´s not valid
+      return {password: true};
+    }
+    return null;
+  };
+}
 
 function emailCompare(c: AbstractControl): { [key: string]: boolean } | null {
   const emailControl = c.get('email');
@@ -50,6 +70,7 @@ export class CustomerComponent implements OnInit {
     this.customerForm = this.fb.group({
       firstName: ['', [Validators.required, Validators.minLength(3)]],
       lastName: ['', [Validators.required, Validators.maxLength(50)]],
+      password: ['Toto', validatePassword()],
       emailGroup: this.fb.group({
         email: ['', [Validators.required, Validators.email]],
         confirmEmail: ['', [Validators.required]],
@@ -66,7 +87,7 @@ export class CustomerComponent implements OnInit {
     const emailControl = this.customerForm.get('emailGroup.email');
     emailControl.valueChanges.pipe(
       debounceTime(1000)
-    ).subscribe(value => this.setMessage(emailControl));
+    ).subscribe(() => this.setMessage(emailControl));
   }
 
   save() {
